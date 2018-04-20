@@ -83,8 +83,16 @@ module.exports = {
     <script type="text/javascript">
         <% 
             compilation.assets[
-                htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpack.files.publicPath.length)
+                htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpack.files.publicPath.length).source()
             ] 
         %>
+    </script>
+    //然后在各个页面中排除main.js
+    <script>
+        <% for(var key in htmlWebpackPlugin.files.chunks) { %>
+            <% if(key !== 'main') { %>
+                <script src="<%= htmlWebpackPlugin.files.chunks[key] %>">
+            <% } %>
+        <% } %>
     </script>
 ```
