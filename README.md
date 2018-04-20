@@ -57,3 +57,42 @@ module.exports = {
 但是在模板中<title><%= htmlWebpackPlugin.options.title %></title>必须使用驼峰式命令。不然会报错一直提示这个插件未定义。这是一个坑啊。弄了好久才知道。谢谢下面同学的解答。
 
 ```
+
+```
+#### html-webpack-plugin
+1. publicPath: This option specifies the public URL of the output directory when referenced in a browser.
+                此选项指定在浏览器中引用的输出目录的公共URL。
+2.  template: 'index.html', 使用了上下文目录
+    可以在模块index.html里使用模块字符串，<script src="<%= htmlWebpackPlugin.files.chunks.main.entry>"></script>,结果为:
+        <script src="main-743c2228e75a244b38fb.js"></script>.
+    此外还可以使用JS语句进行逻辑判断等。
+    plugins: [
+        new htmlWebpackPlugin({
+            template: 'index.html',
+            inject: false,
+            title: 'this is a.html',
+            filename: 'a.html',
+            excludeChunks: ['b', 'c'],
+            minify: {
+                collapseWhitespace: true
+            }
+        })
+    ]
+3. 将共有js文件内容内联插入模板HTML，以减少请求次数，提高性能。
+    //在模板index.html的头部使用模板字符串
+    <script type="text/javascript">
+        <% 
+            compilation.assets[
+                htmlWebpackPlugin.files.chunks.main.entry.substr(htmlWebpack.files.publicPath.length).source()
+            ] 
+        %>
+    </script>
+    //然后在各个页面中排除main.js
+    <script>
+        <% for(var key in htmlWebpackPlugin.files.chunks) { %>
+            <% if(key !== 'main') { %>
+                <script src="<%= htmlWebpackPlugin.files.chunks[key] %>">
+            <% } %>
+        <% } %>
+    </script>
+```
