@@ -1,1 +1,5 @@
-function add() {}
+function add() {
+    alert('nihao');
+}
+
+add();
