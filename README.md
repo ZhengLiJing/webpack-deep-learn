@@ -59,7 +59,9 @@ module.exports = {
 ```
 
 ```
+
 #### html-webpack-plugin
+
 1. publicPath: This option specifies the public URL of the output directory when referenced in a browser.
                 此选项指定在浏览器中引用的输出目录的公共URL。
 2.  template: 'index.html', 使用了上下文目录
