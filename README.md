@@ -67,6 +67,7 @@
     正确: include: /src/
 
 #### babel 的 presets 的位置
+
     // webpack 1.x
     // cnpm i -D babel-preset-latest@6.16.0 babel-core@6.18.0
     1. 直接在loders里，即
@@ -81,6 +82,7 @@
             ]
 
 #### postcss-loader
+
     // webpack 1.x
     // cnpm i -D postcss-loader@1.1.0
     PostCSS is a CSS post-processing tool that can transform your CSS in a lot of cool ways, like autoprefixing, linting and more!
@@ -115,8 +117,10 @@
             'sass-loader'
         ]
     }
+
 #### less-loader
-    // webpack 1.x 
+
+    // webpack 1.x
     // cnpm i -D less-loader@2.2.3 less@2.3.1
     module: {
         loaders: [
@@ -128,3 +132,87 @@
     }
     1. loaders: 'style!css!postcss!less',可以不添加-loader后缀
     2. less会处理@import的文件，所以不用css-loader不用使用查询参数importLoader=1
+
+##### html-loader
+
+    // webpack 1.x
+    // cnpm i -D html-loader@0.4.4 ejs-loader@0.3.0
+    module: {
+        loaders: [
+
+            {
+                test: /\.html$/,
+                loader: 'html'
+            }
+        ]
+    }
+    1. html-loader是将html作为字符串输出
+
+#### ejs-loader 模板文件转换
+
+    // webpack 1.x
+    // cnpm i -D ejs-loader@0.3.0
+    module: {
+        loaders: [
+
+            {
+                test: /\.tpl$/,
+                loader: 'ejs-loader'
+            }
+        ]
+    }
+    1. 使用模板引擎ejs，可以在html使用js,方式是使用<%= %>或<% %>包含
+        <%= name %>
+        <% for (var i = 0, len = array.length; i < len; i++) { %>
+            <%= array[i] %>
+        <% } %>
+
+#### 图片资源打包
+
+    // webpack 1.x
+    // cnpm i -D file-loader@0.9.0
+    1. css文件中引入图片
+        + 可以使用绝对路径
+        + 可以使用相对路径，file-loader可以识别
+    2. index.html引入图片
+        + 可以使用绝对路径
+        + 可以使用相对路径，file-loader可以识别
+    3. 模板文件中引入图片
+        + 可以使用绝对路径
+        + 使用相对路径时，图片加载失败，解决办法是使用require
+            <img src="${require('../assets/icon.png')}" />
+
+#### 内联图片 url-loader
+
+    // webpack 1.x
+    // cnpm i -D url-loader@0.5.7
+    module: {
+        loaders: [
+            {
+                test: /\.(png|jpe?g|svg|gif)$/,
+                loader: 'url-loader?limit=17000'
+                // loader: 'file-loader'
+            }
+        ]
+    }
+    1. 图片直接使用file-loader进行转化，会对图片进行单独打包，浏览器会进行缓存
+                                   Asset       Size     Chunks             Chunk Names
+    1f01b9d84a3cfba3832012b1108f41c9.png     16.2 kB          [emitted]
+                            app-bundle.js    15.7 kB       0  [emitted]  app
+                                index.html   436 bytes          [emitted]
+    2. 使用url-loader的limit参数，图片小于limit时，会被编码成base64文件放入html中，
+        但是浏览器不会进行缓存,会造成代码的冗余，增加代码的体积。
+
+#### image-webpack-loader
+    // webpac 1.x
+    // cnpm i -D image-webpack-loader@2.0.0
+    module: {
+        {
+            test: /\.(png|jpe?g|svg|gif)$/,
+            loaders: [
+                'url-loader?limit=1000&name=[name]-[hash:5].[ext]',
+                'image-webpack-loader?optimizationLevel=7'
+            ]
+        }
+    }
+    1. 对要打包的图片进行压缩
