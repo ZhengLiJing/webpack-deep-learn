@@ -1,8 +1,13 @@
-import layer from './components/layer.js'
-console.log(layer());
+import './css/common.css';
+import Layer from './components/layer.js';
 
 const App = () => {
-    console.log(layer());
+    var dom = document.getElementById('app');
+    var layerIns = new Layer();
+    dom.innerHTML = layerIns.tpl({
+        name: 'zhenglijing',
+        array: ['Apple', 'ASUS', 'Lenovo']
+    });
 }
 
 new App()
