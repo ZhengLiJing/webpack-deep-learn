@@ -4,19 +4,29 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
     entry: {
-        a: './src/script/a.js',
-        main: './src/script/main.js'
+        app: './src/app.js'
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'js/[name]-[chunkhash].js'
+        filename: '[name]-bundle.js'
+    },
+    module: {
+        loaders: [
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                query: {
+                    presets: ['latest']
+                }
+            }
+        ]
     },
     plugins: [
         new htmlWebpackPlugin({
             template: 'index.html',
             inject: 'body',
-            title: 'webpack is very nice'
-        }),
-        new CleanWebpackPlugin(path.resolve(__dirname, 'dist')),
+            title: 'webpack is very nice',
+            filename: 'index.html'
+        })
     ]
 };
