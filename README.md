@@ -57,9 +57,9 @@ module.exports = {
 但是在模板中<title><%= htmlWebpackPlugin.options.title %></title>必须使用驼峰式命令。不然会报错一直提示这个插件未定义。这是一个坑啊。弄了好久才知道。谢谢下面同学的解答。
 
 ```
+#### html-webpack-plugin
 
 ```
-#### html-webpack-plugin
 1. publicPath: This option specifies the public URL of the output directory when referenced in a browser.
                 此选项指定在浏览器中引用的输出目录的公共URL。
 2.  template: 'index.html', 使用了上下文目录
