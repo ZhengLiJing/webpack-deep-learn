@@ -15,9 +15,10 @@ module.exports = {
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                query: {
-                    presets: ['latest']
-                }
+                // query: {
+                //     presets: ['latest']
+                // },
+                include: /src/
             }
         ]
     },
