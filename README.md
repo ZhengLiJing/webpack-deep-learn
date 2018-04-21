@@ -51,6 +51,11 @@
 | no include | 4871ms |
 | include    | 366ms  |
 
+        webpack 2.x版本中include值如果是字符串的话用相对路径'./src'会报错，
+        必须用path.resolve(__dirname, 'src')。但我们可以用正则：
+        /\.src\//这样就能提升一半速度了
+        此时打包时间为：359ms
+
 #### 打包失败
 
     // webpack 1.x

@@ -18,7 +18,8 @@ module.exports = {
                 // query: {
                 //     presets: ['latest']
                 // },
-                include: /src/
+                include: /\.src\//,
+                exclude: path.resolve(__dirname, 'node_modules')
             }
         ]
     },
