@@ -53,8 +53,11 @@
 
         webpack 2.x版本中include值如果是字符串的话用相对路径'./src'会报错，
         必须用path.resolve(__dirname, 'src')。但我们可以用正则：
-        /\.src\//这样就能提升一半速度了
+        /\.src\//这样就能提升一半速度了，
         此时打包时间为：359ms
+        但是转换没有成功,原因是这个正则没有匹配到src
+        换成include: /src/后，转换成功,
+        换成include: path.resolve(__dirname, 'src')同样成功转换。
 
 #### 打包失败
 
@@ -64,8 +67,8 @@
     正确: include: /src/
 
 #### babel 的 presets 的位置
-
     // webpack 1.x
+    // cnpm i -D babel-preset-latest@6.16.0 babel-core@6.18.0
     1. 直接在loders里，即
     loaders: [
                 {
@@ -76,3 +79,52 @@
                     }
                 }
             ]
+
+#### postcss-loader
+    // webpack 1.x
+    // cnpm i -D postcss-loader@1.1.0
+    PostCSS is a CSS post-processing tool that can transform your CSS in a lot of cool ways, like autoprefixing, linting and more!
+    // webpack 1.x使用
+    module: {
+        loaders: [
+            {
+                test: /\.css$/,
+                loader: 'style-loader!css-loader?importLoaders=1!postcss-loader'
+            }
+        ]
+    },
+    postcss: [
+        require('autoprefixer')({
+            browsers: ['last 5 version']
+        })
+    ],
+    1. post-loader配合插件autoprefixer给浏览器添加前缀
+    2. @import引入的css文件，需要在css-loader添加参数?importLoaders=1,
+        查询参数 importLoaders，用于配置「css-loader 作用于 @import 的资源之前」有多少个 loader。
+            {
+    test: /\.css$/,
+    use: [
+            'style-loader',
+            {
+                loader: 'css-loader',
+                options: {
+                    importLoaders: 1 // 0 => 无 loader(默认); 1 => postcss-loader; 2 => postcss-loader, sass-loader
+                }
+            },
+            'postcss-loader',
+            'sass-loader'
+        ]
+    }
+#### less-loader
+    // webpack 1.x 
+    // cnpm i -D less-loader@2.2.3 less@2.3.1
+    module: {
+        loaders: [
+            {
+                test: /\.less$/,
+                loader: 'style!css!postcss!less'
+            }
+        ]
+    }
+    1. loaders: 'style!css!postcss!less',可以不添加-loader后缀
+    2. less会处理@import的文件，所以不用css-loader不用使用查询参数importLoader=1

@@ -15,14 +15,26 @@ module.exports = {
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
-                // query: {
-                //     presets: ['latest']
-                // },
-                include: /\.src\//,
+                // include: /\.src\//,
+                // include: /src/,
+                include: path.resolve(__dirname, 'src'),
                 exclude: path.resolve(__dirname, 'node_modules')
+            },
+            {
+                test: /\.css$/,
+                loader: 'style-loader!css-loader?importLoaders=1!postcss-loader'
+            },
+            {
+                test: /\.less$/,
+                loader: 'style!css!postcss!less'
             }
         ]
     },
+    postcss: [
+        require('autoprefixer')({
+            browsers: ['last 5 version']
+        })
+    ],
     plugins: [
         new htmlWebpackPlugin({
             template: 'index.html',
